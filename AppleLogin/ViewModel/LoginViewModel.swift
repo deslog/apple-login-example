@@ -6,6 +6,7 @@ import FirebaseAuth
 
 class LoginViewModel: ObservableObject {
     @Published var nonce = ""
+    @AppStorage("log_status") var log_Status = false
     
     func authenticate(credential: ASAuthorizationAppleIDCredential) {
         guard let token = credential.identityToken else {
@@ -19,7 +20,7 @@ class LoginViewModel: ObservableObject {
         }
         
         let firebaseCredential = OAuthProvider.credential(withProviderID: "apple.com", idToken: tokenString, rawNonce: nonce)
-        Auth.auth().signIn(with: firebaseCredential) { (result, err) in
+        Auth.auth().signIn(with: firebaseCredential) { [self] (result, err) in
             if let error = err {
                 print(error.localizedDescription)
                 return
@@ -28,6 +29,10 @@ class LoginViewModel: ObservableObject {
             // User successfully logged into firebase
             print("Logged In Success")
             
+            // directing user to home view
+            withAnimation(.easeInOut) {
+                self.log_Status = true
+            }
         }
     }
 }
