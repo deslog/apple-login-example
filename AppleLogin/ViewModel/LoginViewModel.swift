@@ -26,7 +26,7 @@ class LoginViewModel: ObservableObject {
             }
             
             // User successfully logged into firebase
-            print("Logged In Sucess")
+            print("Logged In Success")
             
         }
     }
